@@ -32,6 +32,7 @@
 #include "Scenes/MainScene/mainScene.h"
 #include "Scenes/GameScene/gameScene.h"
 #include "Scenes/ScoreScene/scoreScene.h"
+#include "Scenes/SaveScene/saveScene.h"
 
 
 #include "Managers/sceneManager.h"

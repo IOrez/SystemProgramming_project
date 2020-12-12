@@ -1,5 +1,8 @@
 #include "../../stdafx.h"
 
+extern SceneManager* g_sceneManager;
+extern WindowManager* g_windowManager;
+
 int makeGameScene(GameScene** gs){
     (*gs) = (GameScene*)malloc(sizeof(GameScene));
     if((*gs)==NULL)return 0;
@@ -15,19 +18,27 @@ int initGameScene(GameScene** gs){
     return 1;
 }
 int releaseGameScene(GameScene** gs){
-    if(*gs!=NULL){
-        free(*gs);
-        *gs = NULL;
-    }
+
     return 1;
 }
 
 int updateGameScene(GameScene** gs){
-
+    if(*gs==NULL)return 0;
+    delTextBlockGameScene(gs);
+    for(int i =0;i<(*gs)->TB_cnt;++i){
+        eraseTextBlock((*gs)->TB_Array[i]);
+        updateTextBlock(&((*gs)->TB_Array[i]));
+    }
 }
 
 int renderGameScene(GameScene** gs){
-    
+    if(*gs==NULL)return 0;
+    if(g_sceneManager->e_currentScene==GAME_SCENE){
+        for(int i =0;i<(*gs)->TB_cnt;++i){
+            printTextBlock((*gs)->TB_Array[i]);
+        }
+    }
+    return 1;
 }
 
 int addTextBlockGameScene(GameScene** gs,TextBlock* tb){
@@ -36,20 +47,21 @@ int addTextBlockGameScene(GameScene** gs,TextBlock* tb){
     (*gs)->TB_Array[++(*gs)->TB_cnt] = tb;
     return 1;
 }
-int delTextBlockGameScene(GameScene** gs,TextBlock* tb){
+int delTextBlockGameScene(GameScene** gs){
     if(*gs==NULL)return 0;
-    if((*gs)->TB_cnt==0)return 0;
-    int idx = -1;
+    int dispireCnt = 0;
     for(int i =0;i<(*gs)->TB_cnt;++i){
-        if((*gs)->TB_Array[i]==tb){
-            idx=i;break;
+        if((*gs)->TB_Array[i]->dispire==1){
+            dispireCnt++;
+            eraseTextBlock((*gs)->TB_Array[i]);
+            free((*gs)->TB_Array[i]);
+            continue;
         }
+        (*gs)->TB_Array[i-dispireCnt] = (*gs)->TB_Array[i];
     }
-
-    if(idx==-1)return 0;
-    free((*gs)->TB_Array[idx]);
-    for(int i = idx+1;(*gs)->TB_cnt;++i)
-        (*gs)->TB_Array[i-1]=(*gs)->TB_Array[i];
-    (*gs)->TB_cnt--;
+    for(int i =(*gs)->TB_cnt-dispireCnt;i<(*gs)->TB_cnt;++i){
+        (*gs)->TB_Array[i]=NULL;
+    }
+    (*gs)->TB_cnt-=dispireCnt;
     return 1;
 }

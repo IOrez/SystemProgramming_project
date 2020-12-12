@@ -6,6 +6,17 @@ extern WindowManager* g_windowManager;
 int makeMainScene(MainScene** ms){
     (*ms) = (MainScene*)malloc(sizeof(MainScene));
     if((*ms)==NULL)return 0;
+    
+    return 1;
+}
+int initMainScene(MainScene** ms){
+    if(*ms==NULL)return 0;
+
+	tcgetattr( 0, &((*ms)->original_mode));		
+
+    noecho();
+    crmode();
+
 
     makeTextBlock(&((*ms)->MenuText[0]),"START GAME",60,15,COLOR_YELLOW,1,-1,NULL);
     makeTextBlock(&((*ms)->MenuText[1]),"SCORE",60,18,COLOR_RED,1,-1,NULL);
@@ -19,30 +30,37 @@ int makeMainScene(MainScene** ms){
     makeTextBlock(&((*ms)->TitleText[4]),"RRRRRRRRRRR             AAA     AAA              III           NNNN   NN NNNN",1,5,COLOR_CYAN,1,-1,NULL);
     makeTextBlock(&((*ms)->TitleText[5]),"RRRR     RRR           AAAAAAAAAAAAA             III           NNNN    NMNNNN",1,6,COLOR_CYAN,1,-1,NULL);
     makeTextBlock(&((*ms)->TitleText[6]),"RRRR      RRR         AAA         AAA         IIIIIIIII        NNNN      NNNN",1,7,COLOR_CYAN,1,-1,NULL);
-    
-
-    return 1;
-}
-int initMainScene(MainScene** ms){
-    if(*ms==NULL)return 0;
-
-	tcgetattr( 0, &((*ms)->original_mode));		
-
-    noecho();
-    struct termios ttystate;
-	tcgetattr( 0, &ttystate);
-	ttystate.c_lflag	&= ~ICANON;	
-	ttystate.c_cc[VMIN]	= 0;
-    ttystate.c_cc[VTIME] = 0;
-	tcsetattr( 0, TCSANOW, &ttystate);
 
     return 1;
 }
 int releaseMainScene(MainScene** ms){
-    if(*ms!=NULL){
-        free(*ms);
-        *ms = NULL;
+
+    echo();
+    tcsetattr( 0, TCSANOW, &((*ms)->original_mode));
+
+    for(int i =0;i<(*ms)->TB_cnt;++i){
+        if((*ms)->TB_Array[i]!=NULL){
+            free((*ms)->TB_Array[i]);
+            (*ms)->TB_Array[i]=NULL;
+        }
     }
+
+    for(int i =0;i<7;++i){
+        if((*ms)->TitleText[i]!=NULL){
+            free((*ms)->TitleText[i]);
+            (*ms)->TitleText[i]=NULL;
+        }
+    }
+
+    for(int i =0;i<3;++i){
+        if((*ms)->MenuText[i]!=NULL){
+            free((*ms)->MenuText[i]);
+            (*ms)->MenuText[i]=NULL;
+        }
+    }
+
+    free((*ms)->ArrowText);
+    (*ms)->ArrowText=NULL;
     return 1;
 }
 
@@ -76,12 +94,15 @@ int updateMainScene(MainScene** ms){
         }
         else if(c=='\n'){
             eraseTextBlock((*ms)->ArrowText);
-            echo();
-            tcsetattr( 0, TCSANOW, &((*ms)->original_mode));
+            releaseMainScene(ms);
             switch((*ms)->select){
                 case 0:
+                    initGameScene(&(g_sceneManager->o_gameScene));
+                    clear();
                     g_sceneManager->e_currentScene = GAME_SCENE;break;
                 case 1:
+                    initScoreScene(&(g_sceneManager->o_scoreScene));
+                    clear();
                     g_sceneManager->e_currentScene = SCORE_SCENE;break;
                 case 2:
                     g_sceneManager->e_currentScene= TERMINATE;break;

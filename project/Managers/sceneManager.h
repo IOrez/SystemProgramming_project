@@ -1,6 +1,6 @@
 
 enum CURRNET_SCENE{
-    MAIN_SCENE,GAME_SCENE,SCORE_SCENE,TERMINATE
+    MAIN_SCENE,GAME_SCENE,SCORE_SCENE,SAVE_SCENE,TERMINATE
 };
 
 typedef struct sceneManager{
@@ -10,6 +10,7 @@ typedef struct sceneManager{
     MainScene*   o_mainScene;
     GameScene*   o_gameScene;
     ScoreScene*  o_scoreScene;
+    SaveScene*   o_saveScene;
 
 }SceneManager;
 

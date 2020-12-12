@@ -9,14 +9,15 @@ int makeSceneManager(SceneManager** sm){
 
 int initSceneManager(SceneManager** sm){
     if((*sm)==NULL)return 0;
-    (*sm)->e_currentScene  = MAIN_SCENE;
     makeMainScene(&((*sm)->o_mainScene));
     makeGameScene(&((*sm)->o_gameScene));
     makeScoreScene(&((*sm)->o_scoreScene));
+    makeSaveScene(&((*sm)->o_saveScene));
 
+    (*sm)->e_currentScene  = MAIN_SCENE;
     initMainScene(&((*sm)->o_mainScene));
-    initGameScene(&((*sm)->o_gameScene));
-    initScoreScene(&((*sm)->o_scoreScene));
+    // initGameScene(&((*sm)->o_gameScene));
+    // initScoreScene(&((*sm)->o_scoreScene));
     return 1;
 }
 
@@ -25,6 +26,14 @@ int releaseSceneManager(SceneManager** sm){
         releaseMainScene(&((*sm)->o_mainScene));
         releaseGameScene(&((*sm)->o_gameScene));
         releaseScoreScene(&((*sm)->o_scoreScene));
+        releaseSaveScene(&((*sm)->o_saveScene));
+
+
+        free((*sm)->o_mainScene);
+        free((*sm)->o_gameScene);
+        free((*sm)->o_scoreScene);
+        free((*sm)->o_saveScene);
+
         free(*sm);
         *sm = NULL;
     }

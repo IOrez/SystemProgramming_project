@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -c -g
 LDFLAGS = -lncurses
-OBJECTS = main.o sceneManager.o keyboardManager.o windowManager.o struct.o util.o mainScene.o gameScene.o scoreScene.o
+OBJECTS = main.o sceneManager.o keyboardManager.o windowManager.o struct.o util.o mainScene.o gameScene.o scoreScene.o saveScene.o
 
 
 
@@ -34,3 +34,6 @@ gameScene.o : stdafx.h ./Scenes/GameScene/gameScene.c
 
 scoreScene.o : stdafx.h ./Scenes/ScoreScene/scoreScene.c
 	$(CC) $(CFLAGS) ./Scenes/ScoreScene/scoreScene.c
+
+saveScene.o : stdafx.h ./Scenes/SaveScene/saveScene.c
+	$(CC) $(CFLAGS) ./Scenes/SaveScene/saveScene.c
