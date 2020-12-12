@@ -28,10 +28,10 @@ int initMainScene(MainScene** ms){
 
 	tcgetattr( 0, &((*ms)->original_mode));		
 
+    noecho();
     struct termios ttystate;
 	tcgetattr( 0, &ttystate);
 	ttystate.c_lflag	&= ~ICANON;	
-	ttystate.c_lflag	&= ~ECHO;	
 	ttystate.c_cc[VMIN]	= 0;
     ttystate.c_cc[VTIME] = 0;
 	tcsetattr( 0, TCSANOW, &ttystate);
@@ -76,6 +76,7 @@ int updateMainScene(MainScene** ms){
         }
         else if(c=='\n'){
             eraseTextBlock((*ms)->ArrowText);
+            echo();
             tcsetattr( 0, TCSANOW, &((*ms)->original_mode));
             switch((*ms)->select){
                 case 0:
