@@ -16,7 +16,7 @@ int initSaveScene(SaveScene** sas){
 
     makeTextBlock(&((*sas)->scoreText),"-------- << GAME OVER >> -------- ",20,3,COLOR_YELLOW,1,-1,NULL);
     addTextBlockSaveScene(sas,(*sas)->scoreText);
-  
+
     makeTextBlock(&((*sas)->scoreText),"Id : ",25,6,COLOR_YELLOW,1,-1,NULL);
     addTextBlockSaveScene(sas,(*sas)->scoreText);
 
@@ -29,11 +29,11 @@ int initSaveScene(SaveScene** sas){
     makeTextBlock(&((*sas)->scoreText),"--------------------------------- ",20,12,COLOR_YELLOW,1,-1,NULL);
     addTextBlockSaveScene(sas,(*sas)->scoreText);
 
-   
+
 }
 int releaseSaveScene(SaveScene** sas){
-    
-    
+
+
 
 
 }
@@ -42,14 +42,14 @@ int updateSaveScene(SaveScene** sas){
     if(*sas==NULL)return 0;
 
     int ch = getch();
-    
+
     delTextBlockSaveScene(sas);
     for(int i =0;i<(*sas)->TB_cnt;++i){
         eraseTextBlock((*sas)->TB_Array[i]);
         updateTextBlock(&((*sas)->TB_Array[i]));
 
     }
-    
+
 
     if(ch != EOF){
         addChar(&((*sas)->Id), ch);
