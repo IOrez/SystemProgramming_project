@@ -10,7 +10,7 @@ int makeSaveScene(SaveScene** sas){
 
 }
 int initSaveScene(SaveScene** sas){
-
+    TextBlock* tb;
 }
 int releaseSaveScene(SaveScene** sas){
     
@@ -22,6 +22,7 @@ int updateSaveScene(SaveScene** sas){
         eraseTextBlock((*sas)->TB_Array[i]);
         updateTextBlock(&((*sas)->TB_Array[i]));
     }
+    char ch = getch();
 }
 int renderSaveScene(SaveScene** sas){
     if(*sas==NULL)return 0;
@@ -34,7 +35,10 @@ int renderSaveScene(SaveScene** sas){
 }
 
 int addTextBlockSaveScene(SaveScene** sas,TextBlock* tb){
-
+    if(*sas==NULL)return 0;
+    if((*sas)->TB_cnt==MAX_TEXTBLOCK_SIZE)return 0;
+    (*sas)->TB_Array[((*sas)->TB_cnt)++] = tb;
+    return 1;
 }
 int delTextBlockSaveScene(SaveScene** sas){
     if(*sas==NULL)return 0;

@@ -11,24 +11,80 @@ int makeGameScene(GameScene** gs){
 int initGameScene(GameScene** gs){
     if(*gs==NULL)return 0;
 
+    noecho();
+    crmode();
     for(int i =0;i<(*gs)->TB_cnt;++i)
         free((*gs)->TB_Array[i]);
-        
-    (*gs)->TB_cnt=0;  
+    
+    FILE* fp = fopen("Scenes/GameScene/words.txt","r");
+    int i = 0;
+
+    (*gs)->TB_cnt=0;
+    (*gs)->score = 0;
+    (*gs)->frameCount = 100000;
+    while(fgets((*gs)->words[i],MAX_TEXT_SIZE,fp)!=NULL){
+        (*gs)->words[i][strlen((*gs)->words[i])-1]='\0';
+        i++;
+    }
+    makeTextBlock(&((*gs)->ansTB),"",40,10,COLOR_WHITE,1,-1,NULL);
+
+    makeTextBlock(&(*gs)->scoreTB,"SCORE: 0",60,1,COLOR_MAGENTA,1,-1,NULL);
+    fclose(fp);
     return 1;
 }
 int releaseGameScene(GameScene** gs){
-
+    
     return 1;
 }
 
 int updateGameScene(GameScene** gs){
     if(*gs==NULL)return 0;
+    int ch = getch();
     delTextBlockGameScene(gs);
     for(int i =0;i<(*gs)->TB_cnt;++i){
         eraseTextBlock((*gs)->TB_Array[i]);
         updateTextBlock(&((*gs)->TB_Array[i]));
+        if(g_sceneManager->e_currentScene!=GAME_SCENE)break;
     }
+
+    TextBlock* tb;
+    if((*gs)->frameCount==0){
+        int urate = 5000-((*gs)->score);
+        if(urate<10)urate=10;
+        makeTextBlock(&tb,(*gs)->words[rand()%6],rand()%60+10,0,rand()%6,0,rand()%urate+2000,textItemMoveDown);
+        addTextBlockGameScene(gs,tb);
+        (*gs)->frameCount=800000-10000*(*gs)->score;
+        if((*gs)->frameCount<100)(*gs)->frameCount=100;
+    }
+    (*gs)->frameCount--;
+    
+    if(ch!=EOF){
+        if(ch==' '){
+            int a = 1;
+            eraseTextBlock((*gs)->ansTB);
+            delChar(&((*gs)->ansTB));
+         }
+        else if(ch=='\n'){
+            for(int i = 0;i<(*gs)->TB_cnt;++i){
+                if(strcmp((*gs)->TB_Array[i]->text,(*gs)->ansTB->text)==0){
+                    (*gs)->TB_Array[i]->dispire=1;
+                    (*gs)->score+=10;
+                    char buf[MAX_TEXT_SIZE] = "";
+                    sprintf(buf,"SCORE: %d",(*gs)->score);
+                    eraseTextBlock((*gs)->scoreTB);
+                    setText(&((*gs)->scoreTB),buf);
+                    eraseTextBlock((*gs)->ansTB);
+                    setText(&((*gs)->ansTB),NULL);
+                }
+            }
+        }
+        else {
+            if(isalnum(ch))
+                addChar(&((*gs)->ansTB),ch);
+        }
+    }
+    updateTextBlock(&((*gs)->ansTB));
+    updateTextBlock(&((*gs)->scoreTB));
 }
 
 int renderGameScene(GameScene** gs){
@@ -38,13 +94,15 @@ int renderGameScene(GameScene** gs){
             printTextBlock((*gs)->TB_Array[i]);
         }
     }
+    printTextBlock((*gs)->ansTB);
+    printTextBlock((*gs)->scoreTB);
     return 1;
 }
 
 int addTextBlockGameScene(GameScene** gs,TextBlock* tb){
     if(*gs==NULL)return 0;
     if((*gs)->TB_cnt==MAX_TEXTBLOCK_SIZE)return 0;
-    (*gs)->TB_Array[++(*gs)->TB_cnt] = tb;
+    (*gs)->TB_Array[(*gs)->TB_cnt++] = tb;
     return 1;
 }
 int delTextBlockGameScene(GameScene** gs){
@@ -64,4 +122,23 @@ int delTextBlockGameScene(GameScene** gs){
     }
     (*gs)->TB_cnt-=dispireCnt;
     return 1;
+}
+
+int textItemMoveDown(TextBlock* tb){
+    if(tb==NULL)return 0;
+    tb->posy+=1 ;
+    if(tb->posy>LINES-1){
+        if(tb->isVisible==1){
+            g_sceneManager->e_currentScene = SAVE_SCENE;
+            echo();
+            releaseGameScene(&(g_sceneManager->o_gameScene));
+            initSaveScene(&(g_sceneManager->o_saveScene));
+            clear();
+            return 1;
+        }
+         tb->posy =0;
+         tb->isVisible=1;
+         tb->maxUpdateScale = rand()%3000+100000;
+         tb->currentUpdateScale = tb->maxUpdateScale;
+    }
 }

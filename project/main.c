@@ -6,6 +6,7 @@ WindowManager*     g_windowManager;
 
 int main()
 {
+    //FILE* fp = fopen("Scenes/GameScene/words.txt","r");
     makeWindowManager(&g_windowManager);
     makeSceneManager(&g_sceneManager);
     makeKeyboardManager(&g_keyboardManager);

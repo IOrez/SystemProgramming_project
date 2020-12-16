@@ -12,7 +12,7 @@ int makeTextBlock(TextBlock** tb,char* ptext,int posx,int posy,int color,int isV
                 strcpy((*tb)->emptytext,"");
         }
         else{
-                (*tb)->textlen = strlen(ptext)+1;
+                (*tb)->textlen = strlen(ptext);
                 strcpy((*tb)->text,ptext);
                 for(int i = 0;i<(*tb)->textlen;++i)
                         (*tb)->emptytext[i]=' ';
@@ -61,7 +61,9 @@ int setText(TextBlock** tb,char* ptext){
 int addChar(TextBlock** tb,char ch){
         if(*tb==NULL)return 0;
         (*tb)->text[(*tb)->textlen]=ch;
+        (*tb)->emptytext[(*tb)->textlen]=' ';
         (*tb)->text[++((*tb)->textlen)]='\0';
+        (*tb)->emptytext[((*tb)->textlen)]='\0';
         return 1;
 }
 
@@ -69,6 +71,7 @@ int delChar(TextBlock** tb){
         if(*tb==NULL)return 0;
         if((*tb)->textlen == 0) return 0;
         (*tb)->text[--((*tb)->textlen)]='\0';
+        (*tb)->emptytext[((*tb)->textlen)]='\0';
         return 1;
 }
 
