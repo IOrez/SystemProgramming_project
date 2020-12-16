@@ -16,6 +16,8 @@ int initGameScene(GameScene** gs){
     for(int i =0;i<(*gs)->TB_cnt;++i)
         free((*gs)->TB_Array[i]);
     
+    makeTextBlock(&((*gs)->Line),".............................................................................",0,0,COLOR_WHITE,1,-1,NULL);
+
     FILE* fp = fopen("Scenes/GameScene/words.txt","r");
     int i = 0;
 
@@ -26,9 +28,14 @@ int initGameScene(GameScene** gs){
         (*gs)->words[i][strlen((*gs)->words[i])-1]='\0';
         i++;
     }
-    makeTextBlock(&((*gs)->ansTB),"",40,10,COLOR_WHITE,1,-1,NULL);
 
-    makeTextBlock(&(*gs)->scoreTB,"SCORE: 0",60,1,COLOR_MAGENTA,1,-1,NULL);
+    makeTextBlock(&((*gs)->ansblock[0]),"-------------",33,19,COLOR_WHITE,1,-1,NULL);
+    makeTextBlock(&((*gs)->ansblock[1]),"|",32,20,COLOR_WHITE,1,-1,NULL);
+    makeTextBlock(&((*gs)->ansblock[2]),"|",46,20,COLOR_WHITE,1,-1,NULL);
+    makeTextBlock(&((*gs)->ansTB),"",33,20,COLOR_WHITE,1,-1,NULL);
+    makeTextBlock(&((*gs)->ansblock[3]),"-------------",33,21,COLOR_WHITE,1,-1,NULL);
+    makeTextBlock(&((*gs)->Caution),"*Spacebar is delete key*",28,22,COLOR_WHITE,1,-1,NULL);
+    makeTextBlock(&(*gs)->scoreTB,"SCORE: 0",70,2,COLOR_MAGENTA,1,-1,NULL);
     fclose(fp);
     return 1;
 }
@@ -89,11 +96,17 @@ int updateGameScene(GameScene** gs){
 
 int renderGameScene(GameScene** gs){
     if(*gs==NULL)return 0;
+    //printTextBlock((*gs)->ansTB);
     if(g_sceneManager->e_currentScene==GAME_SCENE){
         for(int i =0;i<(*gs)->TB_cnt;++i){
             printTextBlock((*gs)->TB_Array[i]);
         }
     }
+    printTextBlock((*gs)->Line);
+    for(int i =0;i<4;++i){
+        printTextBlock((*gs)->ansblock[i]);
+    }
+    printTextBlock((*gs)->Caution);
     printTextBlock((*gs)->ansTB);
     printTextBlock((*gs)->scoreTB);
     return 1;

@@ -3,7 +3,11 @@ typedef struct gameScene{
     TextBlock* TB_Array[MAX_TEXTBLOCK_SIZE];
     int TB_cnt;
     char words[6][MAX_TEXT_SIZE];
+
+    TextBlock* Line;
+    TextBlock* Caution;
     TextBlock* tbword[6];
+    TextBlock* ansblock[4];
     TextBlock* ansTB;
     TextBlock* scoreTB;
     int termflags;
