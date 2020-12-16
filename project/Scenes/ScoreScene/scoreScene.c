@@ -11,9 +11,6 @@ int makeScoreScene(ScoreScene** ss){
 int initScoreScene(ScoreScene** ss){
     if(*ss==NULL)return 0;
 
-    for(int i=0;i<(*ss)->TB_cnt;++i)
-        free((*ss)->TB_Array[i]);
-
     (*ss)->TB_cnt=0;    
 
     makeTextBlock(&((*ss)->scoreTitleText[0]),"OOOOO    O    O   O  O   O  OOOOO  O   O   OOO   ",15,2,COLOR_CYAN,1,-1,NULL);
@@ -62,7 +59,15 @@ int initScoreScene(ScoreScene** ss){
     return 1;
 }
 int releaseScoreScene(ScoreScene** ss){
+    echo();
+    tcsetattr( 0, TCSANOW, &((*ss)->original_mode));
 
+    for(int i =0;i<(*ss)->TB_cnt;++i){
+        if((*ss)->TB_Array[i]!=NULL){
+            free((*ss)->TB_Array[i]);
+            (*ss)->TB_Array[i]=NULL;
+        }
+    }
 }
 
 int updateScoreScene(ScoreScene** ss){

@@ -3,6 +3,7 @@ typedef struct saveScene{
     TextBlock* TB_Array[MAX_TEXTBLOCK_SIZE];
     TextBlock* scoreText;
     TextBlock* Id;
+    TextBlock* scoreValueTB;
 
     int TB_cnt;
     int select;

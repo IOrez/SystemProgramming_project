@@ -14,10 +14,10 @@ int initSceneManager(SceneManager** sm){
     makeScoreScene(&((*sm)->o_scoreScene));
     makeSaveScene(&((*sm)->o_saveScene));
 
-    (*sm)->e_currentScene  = GAME_SCENE;
-    //initMainScene(&((*sm)->o_mainScene));
+    (*sm)->e_currentScene  = MAIN_SCENE;
+    initMainScene(&((*sm)->o_mainScene));
     //initSaveScene(&((*sm)->o_saveScene));
-     initGameScene(&((*sm)->o_gameScene));
+    //initGameScene(&((*sm)->o_gameScene));
     // initScoreScene(&((*sm)->o_scoreScene));
     return 1;
 }

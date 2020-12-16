@@ -10,11 +10,9 @@ int makeGameScene(GameScene** gs){
 }
 int initGameScene(GameScene** gs){
     if(*gs==NULL)return 0;
-
+    (*gs)->TB_cnt=0;
     noecho();
     crmode();
-    for(int i =0;i<(*gs)->TB_cnt;++i)
-        free((*gs)->TB_Array[i]);
     
     FILE* fp = fopen("Scenes/GameScene/words.txt","r");
     int i = 0;
@@ -33,7 +31,15 @@ int initGameScene(GameScene** gs){
     return 1;
 }
 int releaseGameScene(GameScene** gs){
-    
+    echo();
+    tcsetattr( 0, TCSANOW, &((*gs)->original_mode));
+
+    for(int i =0;i<(*gs)->TB_cnt;++i){
+        if((*gs)->TB_Array[i]!=NULL){
+            free((*gs)->TB_Array[i]);
+            (*gs)->TB_Array[i]=NULL;
+        }
+    }
     return 1;
 }
 
@@ -44,7 +50,13 @@ int updateGameScene(GameScene** gs){
     for(int i =0;i<(*gs)->TB_cnt;++i){
         eraseTextBlock((*gs)->TB_Array[i]);
         updateTextBlock(&((*gs)->TB_Array[i]));
-        if(g_sceneManager->e_currentScene!=GAME_SCENE)break;
+        if(g_sceneManager->e_currentScene!=GAME_SCENE){
+            echo();
+            releaseGameScene(gs);
+            initSaveScene(&(g_sceneManager->o_saveScene));
+            clear();
+            return 1;
+        }
     }
 
     TextBlock* tb;
@@ -130,10 +142,6 @@ int textItemMoveDown(TextBlock* tb){
     if(tb->posy>LINES-1){
         if(tb->isVisible==1){
             g_sceneManager->e_currentScene = SAVE_SCENE;
-            echo();
-            releaseGameScene(&(g_sceneManager->o_gameScene));
-            initSaveScene(&(g_sceneManager->o_saveScene));
-            clear();
             return 1;
         }
          tb->posy =0;
