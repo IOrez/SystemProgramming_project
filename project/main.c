@@ -15,13 +15,11 @@ int main()
     initSceneManager(&g_sceneManager);
     initKeyboardManager(&g_keyboardManager);
 
-
     while(updateSceneManager(&g_sceneManager)){
         renderSceneManager(&g_sceneManager);
         refresh();
     }
-        
-
+    
     releaseKeyboardManager(&g_keyboardManager);
     releaseSceneManager(&g_sceneManager);
     releaseWindowManager(&g_windowManager);

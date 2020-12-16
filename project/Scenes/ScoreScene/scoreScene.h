@@ -3,6 +3,9 @@ typedef struct scoreScene{
     TextBlock* TB_Array[MAX_TEXTBLOCK_SIZE];
     int TB_cnt;
 
+    TextBlock* scoreTitleText[5];
+    TextBlock* scoreRankingText[8];
+
     int termflags;
     struct termios	original_mode;
 }ScoreScene;
