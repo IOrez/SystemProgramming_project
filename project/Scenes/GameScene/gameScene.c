@@ -33,7 +33,7 @@ int initGameScene(GameScene** gs){
     makeTextBlock(&((*gs)->ansTB),"",33,20,COLOR_WHITE,1,-1,NULL);
     makeTextBlock(&((*gs)->ansblock[3]),"-------------",33,21,COLOR_WHITE,1,-1,NULL);
     makeTextBlock(&((*gs)->Caution),"*Spacebar is delete key*",28,22,COLOR_WHITE,1,-1,NULL);
-    makeTextBlock(&(*gs)->scoreTB,"SCORE: 0",70,2,COLOR_MAGENTA,1,-1,NULL);
+    makeTextBlock(&(*gs)->scoreTB,"SCORE: 0",50,2,COLOR_MAGENTA,1,-1,NULL);
     fclose(fp);
     return 1;
 }
@@ -68,12 +68,10 @@ int updateGameScene(GameScene** gs){
 
     TextBlock* tb;
     if((*gs)->frameCount==0){
-        int urate = 5000-((*gs)->score);
-        if(urate<10)urate=10;
-        makeTextBlock(&tb,(*gs)->words[rand()%6],rand()%60+10,0,rand()%6,0,rand()%urate+2000,textItemMoveDown);
+
+        makeTextBlock(&tb,(*gs)->words[rand()%6],rand()%60+10,0,rand()%6,0,2000,textItemMoveDown);
         addTextBlockGameScene(gs,tb);
-        (*gs)->frameCount=800000-10000*(*gs)->score;
-        if((*gs)->frameCount<100)(*gs)->frameCount=100;
+        (*gs)->frameCount=rand()%5000+300000;
     }
     (*gs)->frameCount--;
     

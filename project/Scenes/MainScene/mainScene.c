@@ -59,7 +59,7 @@ int releaseMainScene(MainScene** ms){
             (*ms)->MenuText[i]=NULL;
         }
     }
-
+    (*ms)->TB_cnt=0;
     free((*ms)->ArrowText);
     (*ms)->ArrowText=NULL;
     return 1;
