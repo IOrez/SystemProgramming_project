@@ -15,6 +15,7 @@ typedef struct textblock{
 }TextBlock;
 
 
+
 int makeTextBlock(TextBlock** tb,char* ptext,int posx,int posy,int color,int isVisible,int maxUpdateScale,int (*callbackfunc)(struct textblock*));
 int setPos(TextBlock** tb,int posx,int posy);
 int setColor(TextBlock** tb,int color);
@@ -23,3 +24,8 @@ int addChar(TextBlock** tb,char ch);
 int delChar(TextBlock** tb);
 
 int updateTextBlock(TextBlock** tb);
+
+typedef struct{
+    int score;
+    char name[30];
+}ranking;
