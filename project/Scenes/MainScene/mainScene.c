@@ -12,6 +12,8 @@ int makeMainScene(MainScene** ms){
 int initMainScene(MainScene** ms){
     if(*ms==NULL)return 0;
 
+    (*ms)->TB_cnt=0;
+    
 	tcgetattr( 0, &((*ms)->original_mode));		
 
     noecho();
@@ -30,7 +32,6 @@ int initMainScene(MainScene** ms){
     makeTextBlock(&((*ms)->TitleText[4]),"RRRRRRRRRRR             AAA     AAA              III           NNNN   NN NNNN",1,5,COLOR_CYAN,1,-1,NULL);
     makeTextBlock(&((*ms)->TitleText[5]),"RRRR     RRR           AAAAAAAAAAAAA             III           NNNN    NMNNNN",1,6,COLOR_CYAN,1,-1,NULL);
     makeTextBlock(&((*ms)->TitleText[6]),"RRRR      RRR         AAA         AAA         IIIIIIIII        NNNN      NNNN",1,7,COLOR_CYAN,1,-1,NULL);
-
     return 1;
 }
 int releaseMainScene(MainScene** ms){

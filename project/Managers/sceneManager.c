@@ -16,9 +16,9 @@ int initSceneManager(SceneManager** sm){
 
     (*sm)->e_currentScene  = MAIN_SCENE;
     initMainScene(&((*sm)->o_mainScene));
-    initSaveScene(&((*sm)->o_saveScene));
-    initGameScene(&((*sm)->o_gameScene));
-    initScoreScene(&((*sm)->o_scoreScene));
+    //initSaveScene(&((*sm)->o_saveScene));
+    //initGameScene(&((*sm)->o_gameScene));
+    // initScoreScene(&((*sm)->o_scoreScene));
     return 1;
 }
 
