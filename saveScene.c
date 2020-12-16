@@ -1,4 +1,4 @@
-include "../../stdafx.h"
+#include "../../stdafx.h"
 
 extern SceneManager* g_sceneManager;
 extern WindowManager* g_windowManager;
